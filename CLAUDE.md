@@ -1,134 +1,106 @@
 # CLAUDE.md
 
-This file provides guidance for AI assistants (Claude Code and similar tools) working in this repository.
+AI assistant guidance for the **Electrical One-Line Diagram Tool**.
 
 ---
 
 ## Project Overview
 
-This is a **web application**. Stack, framework, and purpose are yet to be decided — update this section once those choices are made.
+A drag-and-drop electrical single-line (one-line) diagram editor built for engineers. Users drag ANSI/IEEE standard electrical symbols onto a canvas, wire them together, and annotate them with voltage and ampacity ratings. Diagrams persist in the browser via localStorage.
+
+**Stack:** Vite 8 · React 19 · TypeScript · React Flow 11
 
 ---
 
 ## Project Structure
 
-Not defined yet. Update this section once top-level directories are established, with a one-line description of each.
-
 ```
-(add directories here as the project grows)
+src/
+  App.tsx / App.css           # Root layout (3-column CSS Grid), global dark theme
+  main.tsx                    # React DOM entry
+
+  types/diagram.ts            # NodeData, ComponentType interfaces
+  constants/grid.ts           # GRID_SIZE=20, SNAP_THRESHOLD=30, node sizes, default labels
+
+  components/
+    Sidebar/                  # Draggable palette of 6 component tiles
+      symbols/                # Inline SVG previews used in palette items
+    Canvas/                   # ReactFlow wrapper with drop handler and all RF props
+    nodes/                    # Custom React Flow node components (one per component type)
+    PropertiesPanel/          # Right-side editable form for selected node
+
+  hooks/
+    useDiagramState.ts        # nodes/edges state, addNode, updateNode, onConnect
+    useAutoConnect.ts         # onNodeDragStop: proximity scan → auto-create step edge
+    usePersistence.ts         # debounced localStorage save + load on mount
+
+  utils/
+    snapToGrid.ts             # Snaps (x,y) to nearest 20px grid point
+    getHandlePositions.ts     # Absolute {x,y} of each handle for auto-connect math
+    autoConnectUtils.ts       # euclidean distance + duplicate-edge guard
 ```
 
 ---
 
-## Development Environment
-
-Setup process is not yet documented. Once established, record the steps here:
+## Dev Setup
 
 ```bash
-# Clone and install
-git clone https://github.com/chuenoch/claude.git
-cd claude
-
-# TODO: add install, env var setup, and database seed steps
+npm install
+npm run dev    # http://localhost:5173
+npm run build  # type-check + production bundle
 ```
 
 ---
 
-## Running the App
+## Electrical Components
 
-```bash
-# TODO: add the command to start the local dev server
-```
-
----
-
-## Testing, Linting & Type-checking
-
-Not configured yet. Once tooling is chosen, document the commands here:
-
-```bash
-# Run tests
-# TODO
-
-# Lint
-# TODO
-
-# Type-check
-# TODO
-```
+| Type key | ANSI/IEEE Symbol | Handles |
+|---|---|---|
+| `transformer` | Two tangent circles (primary/secondary windings) | top, bottom |
+| `circuitBreaker` | Square with X | top, bottom |
+| `disconnectSwitch` | Open knife-blade switch | top, bottom |
+| `busBar` | Bold horizontal line (160×30) | left, right, tap-1, tap-2, tap-3 |
+| `utilitySource` | Circle with three horizontal lines | out (bottom) |
+| `load` | Downward triangle | in (top) |
 
 ---
 
-## Coding Conventions
+## Key Behaviours
 
-No hard conventions have been set yet. Apply sensible defaults:
-
-- Write clear, readable code over clever one-liners.
-- Name things accurately — good names remove the need for comments.
-- Only add a comment when the *why* is non-obvious (a hidden constraint, a workaround, a subtle invariant).
-- Do not add error handling or validation for states that cannot happen.
-- Do not introduce abstractions beyond what the current task requires.
-
-Update this section when the team agrees on linting rules, formatting tools, or style preferences.
-
----
-
-## Git Workflow
-
-No formal workflow has been decided. Until one is, follow these safe defaults:
-
-- Branch off `main` for all changes.
-- Use descriptive branch names: `<type>/<short-description>` (e.g. `feat/user-auth`, `fix/login-redirect`).
-- Write commit messages in the imperative mood: *"add login page"*, not *"added login page"*.
-- Open a PR for every change — do not push directly to `main`.
-
----
-
-## External Services & Environment Variables
-
-No integrations or environment variables are defined yet. Document them here as they are added:
-
-| Variable | Purpose | Required |
-|----------|---------|---------|
-| *(none yet)* | | |
+- **Snap-to-grid**: 20px grid enforced on both drop and drag via `snapToGrid` util + React Flow `snapGrid={[20,20]}`
+- **Auto-connect**: `useAutoConnect` fires on `onNodeDragStop`, scans all handles within 30px, picks closest pair, creates a `step` edge — skips duplicates
+- **Wire style**: always `type: 'step'` (orthogonal, no bezier curves)
+- **Properties panel**: click a node → panel populates; edit fields → live update via `updateNode`
+- **Persistence**: `usePersistence` debounces localStorage write by 300ms; loads on mount; key `eld-diagram-v1`
 
 ---
 
 ## AI Assistant Rules
 
-### Always do
+- **Never delete files without explicit user confirmation.**
+- Do not push directly to `main` — always use a branch + PR.
+- Do not add comments describing what code does; only add comments for non-obvious *why*.
+- `nodeTypes` object in `Canvas.tsx` must stay **outside** the component (or memoized) — React Flow re-registers types on every render otherwise.
+- Never commit secrets or `.env` files.
 
-- Read a file before editing it.
-- Make the smallest change that fulfils the task — do not refactor surrounding code.
-- Confirm with the user before taking any action that affects shared state (pushes, PR comments, external API calls).
+---
 
-### Never do
+## Coding Conventions
 
-- **Never delete files without explicit user confirmation.** Always ask first, regardless of context.
-- Never push directly to `main`.
-- Never commit secrets, `.env` files, or credential files.
-- Never introduce SQL injection, XSS, command injection, or other OWASP Top-10 vulnerabilities.
-
-### Confirm before proceeding
-
-- Deleting or renaming files or directories
-- Dropping or migrating database tables
-- Force-pushing or destructive `git reset`
-- Modifying CI/CD configuration
-- Sending messages to external services (Slack, email, GitHub comments)
+- TypeScript strict mode — no `any` without `// eslint-disable-next-line` justification
+- React Flow state: always use `useNodesState` / `useEdgesState` hooks — never mutate nodes/edges directly
+- Component CSS lives next to the component file (`.css` colocated)
+- Hooks in `src/hooks/`, pure utils in `src/utils/`
 
 ---
 
 ## Key Files
 
 | File | Purpose |
-|------|---------|
-| `CLAUDE.md` | AI assistant guidance (this file) |
-
-Update this table as significant files and directories are added.
-
----
-
-## Keeping This File Current
-
-Update CLAUDE.md in the same PR as any change that affects project structure, tooling, or conventions. Outdated guidance is worse than no guidance.
+|---|---|
+| `src/App.tsx` | Layout root, selection state, wires all hooks together |
+| `src/components/Canvas/Canvas.tsx` | All React Flow config and event wiring |
+| `src/hooks/useDiagramState.ts` | Single source of truth for nodes + edges |
+| `src/hooks/useAutoConnect.ts` | Proximity-based auto-wiring algorithm |
+| `src/utils/getHandlePositions.ts` | Handle offset table — update when adding new node types |
+| `src/constants/grid.ts` | Node sizes + default labels — update when adding new node types |

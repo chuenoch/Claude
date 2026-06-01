@@ -1,0 +1,72 @@
+.properties-panel {
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  padding: 0;
+  overflow-y: auto;
+}
+
+.panel-header {
+  font-size: 10px;
+  font-family: 'Courier New', monospace;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  padding: 8px 12px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.panel-type {
+  font-size: 11px;
+  font-family: 'Courier New', monospace;
+  color: var(--accent);
+  padding: 12px 12px 4px;
+  letter-spacing: 0.08em;
+}
+
+.panel-empty {
+  font-size: 11px;
+  font-family: 'Courier New', monospace;
+  color: var(--text-muted);
+  padding: 20px 12px;
+  text-align: center;
+}
+
+.panel-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.panel-field label {
+  font-size: 9px;
+  font-family: 'Courier New', monospace;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.panel-field input {
+  background: #1a1a1a;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text);
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  padding: 5px 8px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.panel-field input:focus {
+  border-color: var(--accent);
+}
+
+.panel-field input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.panel-field input[type='number']::-webkit-inner-spin-button,
+.panel-field input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}

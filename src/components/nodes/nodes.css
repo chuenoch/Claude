@@ -1,0 +1,49 @@
+.node-shell {
+  position: relative;
+  border: 2px solid transparent;
+  border-radius: 2px;
+  cursor: grab;
+  color: #e0e0e0;
+  background: transparent;
+}
+
+.node-shell:active {
+  cursor: grabbing;
+}
+
+.node-shell.selected {
+  border-color: #4a9eff;
+  box-shadow: 0 0 10px rgba(74, 158, 255, 0.4);
+}
+
+.node-label {
+  position: absolute;
+  bottom: -18px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 10px;
+  font-family: 'Courier New', monospace;
+  color: #aaa;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.node-handle {
+  width: 8px !important;
+  height: 8px !important;
+  background: #4a9eff !important;
+  border: 1px solid #1a1a1a !important;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.node-shell:hover .node-handle,
+.node-shell.selected .node-handle {
+  opacity: 1;
+}
+
+/* React Flow override — hide default handle ring */
+.react-flow__handle {
+  border-radius: 50%;
+}
