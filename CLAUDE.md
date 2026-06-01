@@ -4,106 +4,118 @@ This file provides guidance for AI assistants (Claude Code and similar tools) wo
 
 ---
 
-## Repository Overview
+## Project Overview
 
-This is the `chuenoch/claude` repository. At the time of writing it is freshly initialized — no source files exist yet. Update this section once a language, framework, or project purpose is established.
+This is a **web application**. Stack, framework, and purpose are yet to be decided — update this section once those choices are made.
 
 ---
 
 ## Project Structure
 
-```
-(to be filled in as the project grows)
-```
+Not defined yet. Update this section once top-level directories are established, with a one-line description of each.
 
-When files are added, document top-level directories here with a one-line description of their purpose.
+```
+(add directories here as the project grows)
+```
 
 ---
 
-## Development Workflow
+## Development Environment
 
-### Branching
-
-- Default branch: `main`
-- Feature branches follow the pattern `<scope>/<short-description>` (e.g. `feat/add-auth`, `fix/login-redirect`)
-- AI-generated branches use the pattern `claude/<task-slug>` (auto-assigned by Claude Code on the web)
-
-### Commit Messages
-
-Use the [Conventional Commits](https://www.conventionalcommits.org/) format:
-
-```
-<type>(<scope>): <short summary>
-
-[optional body]
-```
-
-Common types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
-
-Examples:
-```
-feat(auth): add JWT login endpoint
-fix(api): handle null user gracefully
-docs: update CLAUDE.md with project structure
-```
-
-### Pull Requests
-
-- Keep PRs focused on a single concern.
-- Include a short summary and a test plan in the PR description.
-- Do not merge without passing CI (once CI is configured).
-
----
-
-## AI Assistant Conventions
-
-### General Rules
-
-- **Read before editing.** Always read a file before modifying it.
-- **Minimal changes.** Only change what is needed to fulfill the task; do not refactor unrelated code.
-- **No speculative abstraction.** Do not introduce helpers, factories, or abstractions unless explicitly required.
-- **No comments that describe what the code does.** Only add a comment when the *why* is non-obvious (hidden constraint, workaround, subtle invariant).
-- **No defensive code for impossible states.** Trust framework guarantees; only validate at system boundaries.
-
-### Risky Actions — Always Confirm First
-
-Before executing any of the following, check with the user:
-
-- Deleting files, branches, or database tables
-- Force-pushing or destructive `git reset`
-- Pushing to `main` / `master`
-- Sending messages to external services (Slack, email, GitHub comments)
-- Modifying CI/CD configuration
-
-### Security
-
-- Never introduce SQL injection, XSS, command injection, or other OWASP Top-10 vulnerabilities.
-- Never commit secrets, `.env` files, or credential files.
-- Use parameterised queries, output encoding, and input validation at system boundaries.
-
----
-
-## Testing
-
-> Fill in once a test framework is chosen.
-
-- **Run all tests:** `<command>`
-- **Run a single test:** `<command>`
-- **Lint:** `<command>`
-- **Type-check:** `<command>`
-
----
-
-## Environment Setup
-
-> Fill in once dependencies and tooling are established.
+Setup process is not yet documented. Once established, record the steps here:
 
 ```bash
-# Example — update once real setup is known
+# Clone and install
 git clone https://github.com/chuenoch/claude.git
 cd claude
-# install dependencies, configure env vars, etc.
+
+# TODO: add install, env var setup, and database seed steps
 ```
+
+---
+
+## Running the App
+
+```bash
+# TODO: add the command to start the local dev server
+```
+
+---
+
+## Testing, Linting & Type-checking
+
+Not configured yet. Once tooling is chosen, document the commands here:
+
+```bash
+# Run tests
+# TODO
+
+# Lint
+# TODO
+
+# Type-check
+# TODO
+```
+
+---
+
+## Coding Conventions
+
+No hard conventions have been set yet. Apply sensible defaults:
+
+- Write clear, readable code over clever one-liners.
+- Name things accurately — good names remove the need for comments.
+- Only add a comment when the *why* is non-obvious (a hidden constraint, a workaround, a subtle invariant).
+- Do not add error handling or validation for states that cannot happen.
+- Do not introduce abstractions beyond what the current task requires.
+
+Update this section when the team agrees on linting rules, formatting tools, or style preferences.
+
+---
+
+## Git Workflow
+
+No formal workflow has been decided. Until one is, follow these safe defaults:
+
+- Branch off `main` for all changes.
+- Use descriptive branch names: `<type>/<short-description>` (e.g. `feat/user-auth`, `fix/login-redirect`).
+- Write commit messages in the imperative mood: *"add login page"*, not *"added login page"*.
+- Open a PR for every change — do not push directly to `main`.
+
+---
+
+## External Services & Environment Variables
+
+No integrations or environment variables are defined yet. Document them here as they are added:
+
+| Variable | Purpose | Required |
+|----------|---------|---------|
+| *(none yet)* | | |
+
+---
+
+## AI Assistant Rules
+
+### Always do
+
+- Read a file before editing it.
+- Make the smallest change that fulfils the task — do not refactor surrounding code.
+- Confirm with the user before taking any action that affects shared state (pushes, PR comments, external API calls).
+
+### Never do
+
+- **Never delete files without explicit user confirmation.** Always ask first, regardless of context.
+- Never push directly to `main`.
+- Never commit secrets, `.env` files, or credential files.
+- Never introduce SQL injection, XSS, command injection, or other OWASP Top-10 vulnerabilities.
+
+### Confirm before proceeding
+
+- Deleting or renaming files or directories
+- Dropping or migrating database tables
+- Force-pushing or destructive `git reset`
+- Modifying CI/CD configuration
+- Sending messages to external services (Slack, email, GitHub comments)
 
 ---
 
@@ -117,6 +129,6 @@ Update this table as significant files and directories are added.
 
 ---
 
-## Updating This File
+## Keeping This File Current
 
-Keep CLAUDE.md current. When the project structure, tooling, or conventions change, update the relevant section here as part of the same PR. Outdated guidance is worse than no guidance.
+Update CLAUDE.md in the same PR as any change that affects project structure, tooling, or conventions. Outdated guidance is worse than no guidance.
