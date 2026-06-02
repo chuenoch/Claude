@@ -14,8 +14,11 @@ A drag-and-drop electrical single-line (one-line) diagram editor built for engin
 
 ## Project Structure
 
+All application code lives in the `one-line-app/` subfolder.
+
 ```
-src/
+one-line-app/
+  src/
   App.tsx / App.css           # Root layout (3-column CSS Grid), global dark theme
   main.tsx                    # React DOM entry
 
