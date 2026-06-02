@@ -20,6 +20,7 @@ function DiagramApp() {
     onEdgesChange,
     addNode,
     updateNode,
+    removeNode,
     addEdgeToState,
     onConnect,
   } = useDiagramState();
@@ -47,6 +48,11 @@ function DiagramApp() {
     setPendingType(null);
   }, []);
 
+  const onDeleteNode = useCallback((id: string) => {
+    removeNode(id);
+    setSelectedNodeId(null);
+  }, [removeNode]);
+
   return (
     <div className="app-layout">
       <Sidebar
@@ -68,7 +74,7 @@ function DiagramApp() {
           onPendingPlaced={onPendingPlaced}
         />
       </main>
-      <PropertiesPanel node={selectedNode} onUpdate={updateNode} />
+      <PropertiesPanel node={selectedNode} onUpdate={updateNode} onDelete={onDeleteNode} />
     </div>
   );
 }

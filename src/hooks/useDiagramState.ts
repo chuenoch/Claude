@@ -38,6 +38,14 @@ export function useDiagramState() {
     [setEdges],
   );
 
+  const removeNode = useCallback(
+    (id: string) => {
+      setNodes((nds) => nds.filter((n) => n.id !== id));
+      setEdges((eds) => eds.filter((e) => e.source !== id && e.target !== id));
+    },
+    [setNodes, setEdges],
+  );
+
   const onConnect = useCallback(
     (params: Connection) => {
       setEdges((eds) =>
@@ -57,6 +65,7 @@ export function useDiagramState() {
     addNode,
     updateNode,
     addEdgeToState,
+    removeNode,
     onConnect,
   };
 }

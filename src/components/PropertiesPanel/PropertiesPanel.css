@@ -76,6 +76,30 @@
   -webkit-appearance: none;
 }
 
+.panel-delete {
+  padding: 12px;
+}
+
+.delete-btn {
+  width: 100%;
+  padding: 8px;
+  background: transparent;
+  border: 1px solid #c0392b;
+  border-radius: 2px;
+  color: #e74c3c;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.delete-btn:hover {
+  background: rgba(231, 76, 60, 0.12);
+  color: #ff6b6b;
+}
+
 /* ── Mobile slide-up sheet ── */
 @media (max-width: 768px) {
   .properties-panel {

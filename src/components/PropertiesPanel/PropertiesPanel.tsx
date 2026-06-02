@@ -5,9 +5,10 @@ import './PropertiesPanel.css';
 interface Props {
   node: Node<NodeData> | null;
   onUpdate: (id: string, data: Partial<NodeData>) => void;
+  onDelete: (id: string) => void;
 }
 
-export function PropertiesPanel({ node, onUpdate }: Props) {
+export function PropertiesPanel({ node, onUpdate, onDelete }: Props) {
   const isOpen = !!node;
 
   return (
@@ -63,6 +64,15 @@ export function PropertiesPanel({ node, onUpdate }: Props) {
                 })
               }
             />
+          </div>
+
+          <div className="panel-delete">
+            <button
+              className="delete-btn"
+              onClick={() => onDelete(node.id)}
+            >
+              Remove Component
+            </button>
           </div>
         </>
       )}
