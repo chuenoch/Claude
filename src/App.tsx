@@ -7,7 +7,7 @@ import { PropertiesPanel } from './components/PropertiesPanel/PropertiesPanel';
 import { useDiagramState } from './hooks/useDiagramState';
 import { useAutoConnect } from './hooks/useAutoConnect';
 import { usePersistence } from './hooks/usePersistence';
-import type { NodeData } from './types/diagram';
+import type { NodeData, ComponentType } from './types/diagram';
 import './App.css';
 
 function DiagramApp() {
@@ -25,6 +25,7 @@ function DiagramApp() {
   } = useDiagramState();
 
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+  const [pendingType, setPendingType] = useState<ComponentType | null>(null);
 
   const { onNodeDragStop } = useAutoConnect(nodes, edges, addEdgeToState);
 
@@ -34,6 +35,7 @@ function DiagramApp() {
     (nodes.find((n) => n.id === selectedNodeId) as Node<NodeData>) ?? null;
 
   const onNodeClick: NodeMouseHandler = useCallback((_event, node) => {
+    setPendingType(null);
     setSelectedNodeId(node.id);
   }, []);
 
@@ -41,9 +43,16 @@ function DiagramApp() {
     setSelectedNodeId(null);
   }, []);
 
+  const onPendingPlaced = useCallback(() => {
+    setPendingType(null);
+  }, []);
+
   return (
     <div className="app-layout">
-      <Sidebar />
+      <Sidebar
+        pendingType={pendingType}
+        onSelect={setPendingType}
+      />
       <main className="app-canvas">
         <Canvas
           nodes={nodes}
@@ -55,6 +64,8 @@ function DiagramApp() {
           addNode={addNode}
           onNodeClick={onNodeClick}
           onPaneClick={onPaneClick}
+          pendingType={pendingType}
+          onPendingPlaced={onPendingPlaced}
         />
       </main>
       <PropertiesPanel node={selectedNode} onUpdate={updateNode} />

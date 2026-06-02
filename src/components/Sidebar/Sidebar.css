@@ -1,3 +1,4 @@
+/* ── Desktop sidebar ── */
 .sidebar {
   background: var(--surface);
   border-right: 1px solid var(--border);
@@ -39,6 +40,11 @@
   cursor: grabbing;
 }
 
+.palette-item--pending {
+  border-color: var(--accent);
+  background: rgba(74, 158, 255, 0.12);
+}
+
 .palette-symbol {
   display: flex;
   align-items: center;
@@ -55,4 +61,48 @@
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.05em;
+}
+
+/* ── Mobile bottom bar ── */
+@media (max-width: 768px) {
+  .sidebar {
+    grid-row: 2;
+    grid-column: 1;
+    border-right: none;
+    border-top: 1px solid var(--border);
+    padding: 4px 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    height: var(--bottom-bar-height);
+  }
+
+  .sidebar-header {
+    display: none;
+  }
+
+  .palette-item {
+    flex-shrink: 0;
+    flex-direction: column;
+    width: 56px;
+    padding: 6px 4px;
+    margin: 0;
+  }
+
+  .palette-symbol {
+    height: 32px;
+  }
+
+  .palette-symbol svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .palette-label {
+    font-size: 8px;
+    margin-top: 2px;
+  }
 }

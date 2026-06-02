@@ -3,20 +3,31 @@ import type { ComponentType } from '../../types/diagram';
 import './Sidebar.css';
 
 const PALETTE: { type: ComponentType; label: string }[] = [
-  { type: 'utilitySource',   label: 'Utility Source' },
-  { type: 'transformer',     label: 'Transformer' },
-  { type: 'circuitBreaker',  label: 'Circuit Breaker' },
-  { type: 'disconnectSwitch',label: 'Disconnect Sw.' },
-  { type: 'busBar',          label: 'Bus Bar' },
-  { type: 'load',            label: 'Load' },
+  { type: 'utilitySource',    label: 'Utility' },
+  { type: 'transformer',      label: 'XFMR' },
+  { type: 'circuitBreaker',   label: 'CB' },
+  { type: 'disconnectSwitch', label: 'DS' },
+  { type: 'busBar',           label: 'Bus' },
+  { type: 'load',             label: 'Load' },
 ];
 
-export function Sidebar() {
+interface Props {
+  pendingType: ComponentType | null;
+  onSelect: (type: ComponentType) => void;
+}
+
+export function Sidebar({ pendingType, onSelect }: Props) {
   return (
     <aside className="sidebar">
       <div className="sidebar-header">COMPONENTS</div>
       {PALETTE.map((item) => (
-        <DraggablePaletteItem key={item.type} type={item.type} label={item.label} />
+        <DraggablePaletteItem
+          key={item.type}
+          type={item.type}
+          label={item.label}
+          pending={pendingType === item.type}
+          onSelect={onSelect}
+        />
       ))}
     </aside>
   );

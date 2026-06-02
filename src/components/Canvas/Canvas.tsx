@@ -45,7 +45,18 @@ interface Props {
   addNode: (node: Node<NodeData>) => void;
   onNodeClick: NodeMouseHandler;
   onPaneClick: () => void;
+  pendingType: ComponentType | null;
+  onPendingPlaced: () => void;
 }
+
+const COMPONENT_NAMES: Record<ComponentType, string> = {
+  transformer: 'Transformer',
+  circuitBreaker: 'Circuit Breaker',
+  disconnectSwitch: 'Disconnect Switch',
+  busBar: 'Bus Bar',
+  utilitySource: 'Utility Source',
+  load: 'Load',
+};
 
 export function Canvas({
   nodes,
@@ -57,6 +68,8 @@ export function Canvas({
   addNode,
   onNodeClick,
   onPaneClick,
+  pendingType,
+  onPendingPlaced,
 }: Props) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const { project } = useReactFlow();
@@ -96,10 +109,50 @@ export function Canvas({
     [project, addNode],
   );
 
+  const handlePaneClick = useCallback(
+    (event: React.MouseEvent) => {
+      if (pendingType) {
+        const bounds = canvasRef.current!.getBoundingClientRect();
+        const rawPosition = project({
+          x: event.clientX - bounds.left,
+          y: event.clientY - bounds.top,
+        });
+        const position = snapToGrid(rawPosition);
+        addNode({
+          id: crypto.randomUUID(),
+          type: pendingType,
+          position,
+          data: {
+            componentType: pendingType,
+            label: DEFAULT_LABELS[pendingType],
+            voltage: undefined,
+            ampacity: undefined,
+          },
+        });
+        onPendingPlaced();
+      } else {
+        onPaneClick();
+      }
+    },
+    [pendingType, project, addNode, onPendingPlaced, onPaneClick],
+  );
+
   const memoizedNodeTypes = useMemo(() => nodeTypes, []);
 
   return (
-    <div ref={canvasRef} className="canvas-wrapper">
+    <div ref={canvasRef} className={`canvas-wrapper${pendingType ? ' placing' : ''}`}>
+      {pendingType && (
+        <div className="pending-hint">
+          Tap canvas to place <strong>{COMPONENT_NAMES[pendingType]}</strong>
+          <button
+            className="pending-cancel"
+            onClick={onPendingPlaced}
+            aria-label="Cancel placement"
+          >
+            ✕
+          </button>
+        </div>
+      )}
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -108,7 +161,7 @@ export function Canvas({
         onConnect={onConnect}
         onNodeDragStop={onNodeDragStop}
         onNodeClick={onNodeClick}
-        onPaneClick={onPaneClick}
+        onPaneClick={handlePaneClick}
         onDrop={onDrop}
         onDragOver={onDragOver}
         nodeTypes={memoizedNodeTypes}

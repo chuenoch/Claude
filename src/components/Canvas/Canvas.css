@@ -4,6 +4,51 @@
   position: relative;
 }
 
+.canvas-wrapper.placing {
+  cursor: crosshair;
+}
+
+/* Tap-to-place hint banner */
+.pending-hint {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  background: rgba(74, 158, 255, 0.15);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  color: var(--text);
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  padding: 6px 36px 6px 12px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.pending-hint strong {
+  color: var(--accent);
+}
+
+.pending-cancel {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0;
+  line-height: 1;
+  pointer-events: all;
+}
+
+.pending-cancel:hover {
+  color: var(--text);
+}
+
 /* React Flow overrides for dark theme */
 .react-flow__controls-button {
   background: #242424 !important;
@@ -31,4 +76,16 @@
 
 .react-flow__attribution {
   display: none;
+}
+
+/* Hide minimap on small screens to save space */
+@media (max-width: 768px) {
+  .react-flow__minimap {
+    display: none;
+  }
+
+  .react-flow__controls {
+    bottom: 8px !important;
+    left: 8px !important;
+  }
 }

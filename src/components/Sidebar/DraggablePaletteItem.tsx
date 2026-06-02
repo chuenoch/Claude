@@ -19,9 +19,11 @@ const SYMBOLS: Record<ComponentType, React.FC> = {
 interface Props {
   type: ComponentType;
   label: string;
+  pending: boolean;
+  onSelect: (type: ComponentType) => void;
 }
 
-export function DraggablePaletteItem({ type, label }: Props) {
+export function DraggablePaletteItem({ type, label, pending, onSelect }: Props) {
   const Symbol = SYMBOLS[type];
 
   const onDragStart = (e: React.DragEvent) => {
@@ -30,7 +32,12 @@ export function DraggablePaletteItem({ type, label }: Props) {
   };
 
   return (
-    <div draggable onDragStart={onDragStart} className="palette-item">
+    <div
+      draggable
+      onDragStart={onDragStart}
+      onClick={() => onSelect(type)}
+      className={`palette-item${pending ? ' palette-item--pending' : ''}`}
+    >
       <div className="palette-symbol">
         <Symbol />
       </div>

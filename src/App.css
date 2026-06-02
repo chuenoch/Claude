@@ -7,6 +7,7 @@
   --accent: #4a9eff;
   --sidebar-width: 200px;
   --panel-width: 260px;
+  --bottom-bar-height: 76px;
 }
 
 *,
@@ -25,6 +26,7 @@ body,
   color: var(--text);
 }
 
+/* ── Desktop layout ── */
 .app-layout {
   display: grid;
   grid-template-columns: var(--sidebar-width) 1fr var(--panel-width);
@@ -36,4 +38,18 @@ body,
   position: relative;
   height: 100vh;
   overflow: hidden;
+}
+
+/* ── Mobile layout ── */
+@media (max-width: 768px) {
+  .app-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr var(--bottom-bar-height);
+  }
+
+  .app-canvas {
+    height: auto;
+    grid-row: 1;
+    grid-column: 1;
+  }
 }
