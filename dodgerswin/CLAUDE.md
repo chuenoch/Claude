@@ -10,7 +10,7 @@ A Python automation bot that monitors Los Angeles Dodgers home-game results
 via the MLB Stats API and sends a notification whenever the Dodgers win at
 Dodger Stadium.
 
-**Stack:** Python 3 · MLB Stats API · Twilio SMS
+**Stack:** Python 3 · MLB Stats API · Discord Webhook
 
 ---
 
@@ -26,9 +26,9 @@ Dodger Stadium.
 
 - **Trigger:** Dodgers win AND venue is Dodger Stadium (home game only)
 - **Data source:** MLB Stats API (https://statsapi.mlb.com)
-- **Output:** Twilio SMS to `TWILIO_TO_NUMBER`
+- **Output:** Discord message posted to a channel via webhook
 - **Run mode:** Continuous loop (default, polls every 5 min) or single-shot via `--once` flag (for cron)
-- **Dedup:** Notified game PKs stored in `.notified_games.json` — no double-texts per game
+- **Dedup:** Notified game PKs stored in `.notified_games.json` — no duplicate messages per game
 
 ---
 
@@ -45,8 +45,8 @@ Dodger Stadium.
 
 ```
 dodgerswin/
-  bot.py             # Main bot: polls MLB API, detects home wins, sends SMS
-  requirements.txt   # requests, twilio
+  bot.py             # Main bot: polls MLB API, detects home wins, posts to Discord
+  requirements.txt   # requests (only dependency)
   .env.example       # Template for required env vars (copy to .env)
   .notified_games.json  # Runtime dedup log (auto-created, gitignored)
 ```
@@ -57,10 +57,12 @@ dodgerswin/
 
 | Variable | Description |
 |---|---|
-| `TWILIO_ACCOUNT_SID` | Twilio account SID |
-| `TWILIO_AUTH_TOKEN` | Twilio auth token |
-| `TWILIO_FROM_NUMBER` | Twilio phone number (E.164 format) |
-| `TWILIO_TO_NUMBER` | Recipient phone number (E.164 format) |
+| `DISCORD_WEBHOOK_URL` | Webhook URL from Discord channel settings → Integrations → Webhooks |
+
+**Creating a webhook (free, 30 seconds):**
+1. Open your Discord server → target channel → Edit Channel → Integrations → Webhooks → New Webhook
+2. Click "Copy Webhook URL"
+3. Set as `DISCORD_WEBHOOK_URL` in your environment
 
 ---
 

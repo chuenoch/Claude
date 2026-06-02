@@ -4,7 +4,6 @@ import datetime
 import time
 import sys
 import requests
-from twilio.rest import Client
 
 DODGERS_TEAM_ID = 119
 DODGER_STADIUM_VENUE_ID = 22
@@ -48,16 +47,12 @@ def build_message(game: dict) -> str:
     )
 
 
-def send_sms(body: str) -> None:
-    client = Client(
-        os.environ["TWILIO_ACCOUNT_SID"],
-        os.environ["TWILIO_AUTH_TOKEN"],
-    )
-    client.messages.create(
-        body=body,
-        from_=os.environ["TWILIO_FROM_NUMBER"],
-        to=os.environ["TWILIO_TO_NUMBER"],
-    )
+def send_discord_message(body: str) -> None:
+    requests.post(
+        os.environ["DISCORD_WEBHOOK_URL"],
+        json={"content": body},
+        timeout=10,
+    ).raise_for_status()
 
 
 def load_notified() -> set[str]:
@@ -78,10 +73,10 @@ def run_once() -> None:
         game_pk = str(game["gamePk"])
         if game_pk not in notified and is_home_win(game):
             message = build_message(game)
-            send_sms(message)
+            send_discord_message(message)
             notified.add(game_pk)
             save_notified(notified)
-            print(f"SMS sent: {message}")
+            print(f"Discord message sent: {message}")
 
 
 if __name__ == "__main__":
